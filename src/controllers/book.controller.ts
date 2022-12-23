@@ -18,6 +18,16 @@ const createBook = asyncErrorHandler(async (req: Request, res: Response) => {
     newBookVar.dateOfPublication = new Date(dateOfPublication);
   }
 
+  const authorId = newBookVar.authorId;
+
+  const author = await prisma.author.findUnique({
+    where: {id: authorId},
+  })
+
+  if (!author){
+    throw createError(StatusCodes.NOT_FOUND, `author with id = ${authorId} is not found, please select the correct author.`);      
+  }
+
   const book = await prisma.book.create({
     data: { ...newBookVar },
   });
@@ -63,6 +73,16 @@ const editBook = asyncErrorHandler(async (req: Request, res: Response, next: Nex
 
   if (!book) {
     throw createError(StatusCodes.NOT_FOUND, `Book with id ${id} is not found.`);      
+  }
+
+  const authorId = bookToUpdateVar.authorId;
+
+  const author = await prisma.author.findUnique({
+    where: {id: authorId},
+  })
+
+  if (!author){
+    throw createError(StatusCodes.NOT_FOUND, `author with id = ${authorId} is not found, please select the correct author.`);      
   }
 
   const updatedBook = await prisma.book.update({
