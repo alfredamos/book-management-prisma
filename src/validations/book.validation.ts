@@ -33,5 +33,5 @@ export const bookValidation = (book: Book) => {
         category,
         quantity,
         dateOfPublication,
-    })
+    }, {abortEarly: false})
 }

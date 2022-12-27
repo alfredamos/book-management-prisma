@@ -1,9 +1,10 @@
-import createError from "http-errors";
+import catchError from "http-errors";
 import asyncErrorHandler from "express-async-handler";
 import { PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { Author } from "../models/author.model";
+
 
 const prisma = new PrismaClient();
 
@@ -31,10 +32,9 @@ const deleteAuthor = asyncErrorHandler(async (
   });
 
   if (!author) {
-    throw createError(
-      StatusCodes.NOT_FOUND,
-      `Author with id ${id} is not found.`
-    );
+    throw catchError(
+       StatusCodes.NOT_FOUND,
+       `Author with id ${id} is not found.`)    
   }
 
   const deletedAuthor = await prisma.author.delete({
@@ -56,10 +56,11 @@ const editAuthor = asyncErrorHandler(
     });
 
     if (!author) {      
-      throw createError(
+      throw catchError(
         StatusCodes.NOT_FOUND,
         `Author with id ${id} is not found.`
-      );
+      ); 
+      
     }
 
     const updatedAuthor = await prisma.author.update({
@@ -93,7 +94,8 @@ const getAuthorById = asyncErrorHandler(
     });
 
     if (!author) {
-      throw createError(StatusCodes.NOT_FOUND, `Author with id ${id} is not found.`);      
+      throw catchError(StatusCodes.NOT_FOUND, `Author with id ${id} is not found.`); 
+      
     }
 
     res.status(StatusCodes.OK).json(author);

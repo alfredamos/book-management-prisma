@@ -10,6 +10,6 @@ const authorSchema = joi_1.default.object({
 });
 const authorValidation = (author) => {
     const { name } = author;
-    return authorSchema.validate({ name });
+    return authorSchema.validate({ name, }, { abortEarly: false });
 };
 exports.authorValidation = authorValidation;

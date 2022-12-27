@@ -12,8 +12,8 @@ const bookValidationMiddleware = (req, res, next) => {
         for (const err of error.details) {
             errorMessage.push(err.message);
         }
-        //throw createError(StatusCodes.BAD_REQUEST, `${errorMessage} - please provide all required values`); 
-        throw new bad_request_error_1.BadRequest(`${errorMessage} - please provide all required values`);
+        throw new bad_request_error_1.BadRequest(`${errorMessage.join('. ')} - please provide all required values`);
+        //throw createError(StatusCodes.BAD_REQUEST, `${errorMessage} - please provide all required values`);       
     }
     next();
     return value;

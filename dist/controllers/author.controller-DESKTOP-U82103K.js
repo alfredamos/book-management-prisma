@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAuthorById = exports.getAllAuthors = exports.editAuthor = exports.deleteAuthor = exports.createAuthor = void 0;
+//import createError from "http-errors";
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const client_1 = require("@prisma/client");
 const http_status_codes_1 = require("http-status-codes");
@@ -33,10 +34,10 @@ const deleteAuthor = (0, express_async_handler_1.default)((req, res, next) => __
         where: { id },
     });
     if (!author) {
-        // throw createError(
-        //   StatusCodes.NOT_FOUND,
-        //   `Author with id ${id} is not found.`
-        // );
+        /* throw createError(
+          StatusCodes.NOT_FOUND,
+          `Author with id ${id} is not found.`
+        ); */
         throw new not_found_error_1.NotFound(`Author with id = ${id} is not found.`);
     }
     const deletedAuthor = yield prisma.author.delete({
@@ -84,7 +85,7 @@ const getAuthorById = (0, express_async_handler_1.default)((req, res, next) => _
         },
     });
     if (!author) {
-        //throw createError(StatusCodes.NOT_FOUND, `Author with id ${id} is not found.`); 
+        //throw createError(StatusCodes.NOT_FOUND, `Author with id ${id} is not found.`);      
         throw new not_found_error_1.NotFound(`Author with id = ${id} is not found.`);
     }
     res.status(http_status_codes_1.StatusCodes.OK).json(author);

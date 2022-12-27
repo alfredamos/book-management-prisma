@@ -26,6 +26,6 @@ const bookValidation = (book) => {
         category,
         quantity,
         dateOfPublication,
-    });
+    }, { abortEarly: false });
 };
 exports.bookValidation = bookValidation;

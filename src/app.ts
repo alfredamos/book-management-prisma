@@ -11,7 +11,7 @@ import { errorHandlerMiddleware } from "./middleware/error-handler.middleware";
 
 const app = express();
 
-const Port = process.env.PORT || 3001;
+const Port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));

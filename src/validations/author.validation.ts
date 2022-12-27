@@ -8,5 +8,5 @@ const authorSchema = Joi.object({
 export const authorValidation = (author: Author) => {
     const {name} = author;   
     
-    return authorSchema.validate({name})
+    return authorSchema.validate({name,}, {abortEarly: false})
 }

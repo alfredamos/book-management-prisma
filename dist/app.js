@@ -12,7 +12,7 @@ const book_route_1 = __importDefault(require("./routes/book.route"));
 const not_found_route_middleware_1 = require("./middleware/not-found-route.middleware");
 const error_handler_middleware_1 = require("./middleware/error-handler.middleware");
 const app = (0, express_1.default)();
-const Port = process.env.PORT || 3001;
+const Port = process.env.PORT || 3000;
 app.use((0, cors_1.default)());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.json());

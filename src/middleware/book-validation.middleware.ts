@@ -3,6 +3,7 @@ import { Book } from '../models/book.model';
 import { bookValidation } from '../validations/book.validation';
 import {Request, Response, NextFunction} from "express";
 import { StatusCodes } from 'http-status-codes';
+import { BadRequest } from '../errors/bad-request.error';
 
 export const bookValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const {body: book}  = req;
@@ -16,7 +17,9 @@ export const bookValidationMiddleware = (req: Request, res: Response, next: Next
             errorMessage.push(err.message);
         }
 
-        throw createError(StatusCodes.BAD_REQUEST, `${errorMessage} - please provide all required values`);       
+        //throw createError(StatusCodes.BAD_REQUEST, `${errorMessage} - please provide all required values`); 
+        throw new BadRequest(`${errorMessage} - please provide all required values`);
+              
     }
 
     next();

@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBookById = exports.getAllBooks = exports.editBook = exports.deleteBook = exports.createBook = void 0;
+//import createError from "http-errors";
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const client_1 = require("@prisma/client");
 const http_status_codes_1 = require("http-status-codes");
@@ -26,20 +27,20 @@ const createBook = (0, express_async_handler_1.default)((req, res) => __awaiter(
     if (typeof dateOfPublication === "string") {
         newBookVar.dateOfPublication = new Date(dateOfPublication);
     }
-    const isbn = newBookVar.isbn;
-    const bookExisted = yield prisma.book.findUnique({
-        where: { isbn }
-    });
-    if (bookExisted) {
-        throw new bad_request_error_1.BadRequest(`Book with isbn = {isbn} exists, isbn must be unique, please provide a new isbn.`);
-    }
     const authorId = newBookVar.authorId;
     const author = yield prisma.author.findUnique({
         where: { id: authorId },
     });
     if (!author) {
-        //throw createError(StatusCodes.NOT_FOUND, `author with id = ${authorId} is not found, please select the correct author.`);    
-        throw new not_found_error_1.NotFound(`Author with id = ${authorId} is not found, please select the correct author.`);
+        // throw createError(StatusCodes.NOT_FOUND, `author with id = ${authorId} is not found, please select the correct author.`);
+        throw new not_found_error_1.NotFound(`author with id = ${authorId} is not found, please select the correct author.`);
+    }
+    const isbn = newBookVar.isbn;
+    const bookExisted = yield prisma.book.findUnique({
+        where: { isbn },
+    });
+    if (bookExisted) {
+        throw new bad_request_error_1.BadRequest(`Book already exists with isbn = ${isbn}, please provide a new isbn since isbn must be unique.`);
     }
     const book = yield prisma.book.create({
         data: Object.assign({}, newBookVar),
@@ -74,23 +75,23 @@ const editBook = (0, express_async_handler_1.default)((req, res, next) => __awai
         where: { id },
     });
     if (!book) {
-        //throw createError(StatusCodes.NOT_FOUND, `Book with id ${id} is not found.`); 
+        //throw createError(StatusCodes.NOT_FOUND, `Book with id ${id} is not found.`);
         throw new not_found_error_1.NotFound(`Book with id = ${id} is not found.`);
-    }
-    const isbn = bookToUpdateVar.isbn;
-    const bookExisted = yield prisma.book.findUnique({
-        where: { isbn }
-    });
-    if (bookExisted) {
-        throw new bad_request_error_1.BadRequest(`Book with isbn = {isbn} exists, isbn must be unique, please provide a new isbn.`);
     }
     const authorId = bookToUpdateVar.authorId;
     const author = yield prisma.author.findUnique({
         where: { id: authorId },
     });
     if (!author) {
-        //throw createError(StatusCodes.NOT_FOUND, `author with id = ${authorId} is not found, please select the correct author.`);  
-        throw new not_found_error_1.NotFound(`Author with id = ${id} is not found, please select the correct author.`);
+        //throw createError(StatusCodes.NOT_FOUND, `author with id = ${authorId} is not found, please select the correct author.`);
+        throw new not_found_error_1.NotFound(`author with id = ${authorId} is not found, please select the correct author.`);
+    }
+    const isbn = bookToUpdateVar.isbn;
+    const bookExisted = yield prisma.book.findUnique({
+        where: { isbn },
+    });
+    if (bookExisted) {
+        throw new bad_request_error_1.BadRequest(`Book already exists with isbn = ${isbn}, please provide a new isbn since isbn must be unique.`);
     }
     const updatedBook = yield prisma.book.update({
         where: { id },
@@ -117,7 +118,7 @@ const getBookById = (0, express_async_handler_1.default)((req, res, next) => __a
         },
     });
     if (!book) {
-        //throw createError(StatusCodes.NOT_FOUND, `Book with id ${id} is not found.`);      
+        //throw createError(StatusCodes.NOT_FOUND, `Book with id ${id} is not found.`);
         throw new not_found_error_1.NotFound(`Book with id = ${id} is not found.`);
     }
     res.status(http_status_codes_1.StatusCodes.OK).json(book);

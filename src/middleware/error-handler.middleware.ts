@@ -3,14 +3,11 @@ import { HttpError } from "http-errors";
 import {StatusCodes} from "http-status-codes";
 
 export const errorHandlerMiddleware = (error: HttpError, req: Request, res: Response, next: NextFunction) => {
-    if (error.status === StatusCodes.NOT_FOUND || error.status === StatusCodes.BAD_REQUEST){
-        res.status(error.status).json({        
-            message: error.message,    
-        });
-    }
+    const statusCode = error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR;
+    const message = error.message || 'Something went wrong';        
     
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        message: error.message
+    return res.status(statusCode).json({
+        message
     });
    
 }
